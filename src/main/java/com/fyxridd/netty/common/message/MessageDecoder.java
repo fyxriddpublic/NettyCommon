@@ -43,5 +43,5 @@ public abstract class MessageDecoder extends ByteToMessageDecoder{
         }
     }
 
-    protected abstract void handle(Message msg);
+    protected abstract void handle(MessageExtra msg);
 }

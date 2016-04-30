@@ -1,6 +1,5 @@
 package com.fyxridd.netty.common.message;
 
-import com.fyxridd.netty.common.message.Message;
 import org.json.JSONObject;
 
 /**
