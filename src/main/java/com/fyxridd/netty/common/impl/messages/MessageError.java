@@ -1,7 +1,7 @@
 package com.fyxridd.netty.common.impl.messages;
 
 import com.fyxridd.netty.common.MessageMain;
-import com.fyxridd.netty.common.message.MessageHandler;
+import com.fyxridd.netty.common.message.v1.Ver1MessageHandler;
 import com.fyxridd.netty.common.message.Message;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,7 +12,7 @@ import org.json.JSONObject;
 public class MessageError implements Message{
     //注册错误信息
     static {
-        MessageMain.getMessageManager().register(MessageError.class, new MessageHandler<MessageError>() {
+        MessageMain.getMessageManager().register(MessageError.class, new Ver1MessageHandler<MessageError>() {
             @Override
             public MessageError fromJson(JSONObject json) {
                 try {

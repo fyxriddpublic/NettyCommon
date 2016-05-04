@@ -1,11 +1,12 @@
-package com.fyxridd.netty.common.message;
+package com.fyxridd.netty.common.message.v1;
 
+import com.fyxridd.netty.common.message.Message;
 import org.json.JSONObject;
 
 /**
  * 信息处理器
  */
-public interface MessageHandler<T extends Message> {
+public interface Ver1MessageHandler<T extends Message> {
     /**
      * @return 可为null
      */

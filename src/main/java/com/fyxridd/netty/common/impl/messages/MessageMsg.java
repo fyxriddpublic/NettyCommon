@@ -1,7 +1,7 @@
 package com.fyxridd.netty.common.impl.messages;
 
 import com.fyxridd.netty.common.MessageMain;
-import com.fyxridd.netty.common.message.MessageHandler;
+import com.fyxridd.netty.common.message.v1.Ver1MessageHandler;
 import com.fyxridd.netty.common.message.Message;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,7 +12,7 @@ import org.json.JSONObject;
 public class MessageMsg implements Message{
     //注册消息信息
     static {
-        MessageMain.getMessageManager().register(MessageMsg.class, new MessageHandler<MessageMsg>() {
+        MessageMain.getMessageManager().register(MessageMsg.class, new Ver1MessageHandler<MessageMsg>() {
             @Override
             public MessageMsg fromJson(JSONObject json) {
                 try {
