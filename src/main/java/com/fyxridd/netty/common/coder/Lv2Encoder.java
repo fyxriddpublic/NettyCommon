@@ -28,7 +28,7 @@ public class Lv2Encoder extends MessageToByteEncoder<MessageContext> {
             out.writeBytes(bytes);
         }
         //内容
-        ByteBuf buf = msg.getVer().getVerCoder().encode(msg);
+        ByteBuf buf = msg.getVer().getVerCoder().encode(msg.getContent());
         try {
             out.writeBytes(buf);
         } finally {

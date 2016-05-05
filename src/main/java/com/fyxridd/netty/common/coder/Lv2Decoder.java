@@ -1,6 +1,5 @@
 package com.fyxridd.netty.common.coder;
 
-import com.fyxridd.netty.common.MessageContent;
 import com.fyxridd.netty.common.MessageContext;
 import com.fyxridd.netty.common.MessageMain;
 import com.fyxridd.netty.common.ver.Ver;
@@ -35,8 +34,7 @@ public class Lv2Decoder extends ChannelInboundHandlerAdapter {
                         name = new String(bytes);
                     }
                     //内容
-                    MessageContent messageContent = ver.getVerCoder().decode(buf);
-                    MessageContext messageContext = new MessageContext(ver, namespace, name, messageContent);
+                    MessageContext messageContext = new MessageContext(ver, namespace, name, ver.getVerCoder().decode(buf));
                     //触发事件
                     MessageMain.getMessageManager().trigger(messageContext);
                 }

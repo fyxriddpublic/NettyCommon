@@ -13,7 +13,7 @@ public class Lv1Decoder extends ByteToMessageDecoder {
     protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws Exception {
         //长度
         if (read == 0) {
-            if (buf.readableBytes() < 2) return;//这里假设int长度为2字节
+            if (buf.readableBytes() < 2) return;
             else {
                 read = buf.readInt();
                 //异常
