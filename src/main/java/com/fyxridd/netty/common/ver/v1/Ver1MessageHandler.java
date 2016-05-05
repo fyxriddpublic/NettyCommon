@@ -1,6 +1,6 @@
-package com.fyxridd.netty.common.message.ver.v1;
+package com.fyxridd.netty.common.ver.v1;
 
-import com.fyxridd.netty.common.message.ver.VerMessage;
+import com.fyxridd.netty.common.ver.VerMessage;
 import org.json.JSONObject;
 
 /**

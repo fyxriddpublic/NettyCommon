@@ -1,6 +1,6 @@
-package com.fyxridd.netty.common.message.ver;
+package com.fyxridd.netty.common.ver;
 
-import com.fyxridd.netty.common.message.ver.v1.Ver1Coder;
+import com.fyxridd.netty.common.ver.v1.Ver1Coder;
 
 import java.util.HashMap;
 

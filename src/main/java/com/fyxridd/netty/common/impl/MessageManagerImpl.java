@@ -1,48 +1,54 @@
 package com.fyxridd.netty.common.impl;
 
+import com.fyxridd.netty.common.Lv2MessageListener;
 import com.fyxridd.netty.common.MessageManager;
-import com.fyxridd.netty.common.message.ver.v1.Ver1Message;
-import com.fyxridd.netty.common.message.ver.Ver;
-import com.fyxridd.netty.common.message.ver.v1.Ver1MessageHandler;
-import com.fyxridd.netty.common.message.Message;
-import org.json.JSONObject;
+import com.fyxridd.netty.common.MessageContent;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MessageManagerImpl implements MessageManager{
-    private class MessageContext<T extends Message> {
-        Ver1MessageHandler<T> ver1MessageHandler;
+    private HashMap<String, HashMap<String, List<Lv2MessageListener>>> handlers = new HashMap<>();
 
-        MessageContext(Ver1MessageHandler<T> ver1MessageHandler) {
-            this.ver1MessageHandler = ver1MessageHandler;
+    @Override
+    public boolean register(String namespace) {
+        if (handlers.containsKey(namespace)) return false;
+        handlers.put(namespace, new HashMap<String, List<Lv2MessageListener>>());
+        return true;
+    }
+
+    @Override
+    public void addAllListener(String namespace, Lv2MessageListener listener) {
+        HashMap<String, List<Lv2MessageListener>> hash = handlers.get(namespace);
+        if (hash != null) {
+            for (Map.Entry<String, List<Lv2MessageListener>> entry:hash.entrySet()) {
+                entry.getValue().add(listener);
+            }
         }
     }
 
-    private HashMap<Ver, HashMap<String, MessageContext>> messageContexts = new HashMap<>();
-
-    public MessageManagerImpl() {
-        for (Ver ver:Ver.values()) messageContexts.put(ver, new HashMap<String, MessageContext>());
+    @Override
+    public void addListener(String namespace, Lv2MessageListener listener, String... names) {
+        if (names != null && names.length > 0) {
+            HashMap<String, List<Lv2MessageListener>> hash = handlers.get(namespace);
+            if (hash != null) {
+                for (String name:names) {
+                    List<Lv2MessageListener> list = hash.get(name);
+                    if (list != null) list.add(listener);
+                }
+            }
+        }
     }
 
     @Override
-    public <T extends Message> void registerVer1Json(Class<T> messageClass, Ver1MessageHandler<T> ver1MessageHandler) {
-        messageContexts.get(Ver.Json).put(messageClass.getName(), new MessageContext(ver1MessageHandler));
-    }
-
-    @Override
-    public JSONObject toJson(Ver1Message msg) {
-        MessageContext messageContext = messageContexts.get(msg.getClass().getName());
-        JSONObject json = new JSONObject();
-        json.put("id", msg.getClass().getName());
-        json.put("data", messageContext.ver1MessageHandler.toJson(msg.getMsg()));
-        if (!msg.getExtra().isEmpty()) json.put("extra", msg.getExtra());
-        return json;
-    }
-
-    @Override
-    public Message fromJson(JSONObject json) {
-        MessageContext messageContext = messageContexts.get(Ver.Json).get(json.getString("id"));
-        if (messageContext == null) return null;
-        return messageContext.ver1MessageHandler.fromJson(json.getJSONObject("data"));
+    public void trigger(MessageContent message) {
+        HashMap<String, List<Lv2MessageListener>> hash = handlers.get(message.getNamespace());
+        if (hash != null) {
+            List<Lv2MessageListener> list = hash.get(message.getName());
+            if (list != null) {
+                for (Lv2MessageListener listener: list) listener.onEvent(message);
+            }
+        }
     }
 }

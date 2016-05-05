@@ -1,4 +1,4 @@
-package com.fyxridd.netty.common.message.ver;
+package com.fyxridd.netty.common.ver;
 
 /**
  * 信息

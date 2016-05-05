@@ -1,4 +1,4 @@
-package com.fyxridd.netty.common.message.debug;
+package com.fyxridd.netty.common.debug;
 
 import com.fyxridd.netty.common.util.Util;
 import io.netty.channel.ChannelHandlerContext;
