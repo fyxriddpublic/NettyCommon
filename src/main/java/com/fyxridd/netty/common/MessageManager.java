@@ -12,7 +12,7 @@ public interface MessageManager {
      * @param namespace 命名空间
      * @param listener 监听器
      */
-    void addAllListener(String namespace, Lv2MessageListener listener);
+    void addAllListener(String namespace, Listener listener);
 
     /**
      * 添加监听命名空间内的指定消息
@@ -20,11 +20,11 @@ public interface MessageManager {
      * @param listener 监听器
      * @param names 指定消息列表,为空则不监听
      */
-    void addListener(String namespace, Lv2MessageListener listener, String... names);
+    void addListener(String namespace, Listener listener, String... names);
 
     /**
      * 触发事件,调用监听
      * @param message 消息内容
      */
-    void trigger(MessageContent message);
+    void trigger(MessageContext message);
 }

@@ -1,6 +1,6 @@
 package com.fyxridd.netty.common.coder;
 
-import com.fyxridd.netty.common.MessageContent;
+import com.fyxridd.netty.common.MessageContext;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -9,11 +9,11 @@ import io.netty.util.CharsetUtil;
 /**
  * Lv2: 解析MessageContent
  */
-public class Lv2Encoder extends MessageToByteEncoder<MessageContent> {
+public class Lv2Encoder extends MessageToByteEncoder<MessageContext> {
     @Override
-    protected void encode(ChannelHandlerContext ctx, MessageContent msg, ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, MessageContext msg, ByteBuf out) throws Exception {
         //ver
-        out.writeInt(msg.getVerMessage().getVer().getNum());
+        out.writeInt(msg.getVer().getNum());
 
         //namespace
         {
@@ -28,7 +28,7 @@ public class Lv2Encoder extends MessageToByteEncoder<MessageContent> {
             out.writeBytes(bytes);
         }
         //内容
-        ByteBuf buf = msg.getVerMessage().getVer().getVerCoder().encode(msg.getVerMessage());
+        ByteBuf buf = msg.getVer().getVerCoder().encode(msg);
         try {
             out.writeBytes(buf);
         } finally {
