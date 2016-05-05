@@ -1,54 +1,40 @@
 package com.fyxridd.netty.common.impl;
 
 import com.fyxridd.netty.common.Listener;
+import com.fyxridd.netty.common.Message;
 import com.fyxridd.netty.common.MessageManager;
 import com.fyxridd.netty.common.MessageContext;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MessageManagerImpl implements MessageManager{
-    private HashMap<String, HashMap<String, List<Listener>>> handlers = new HashMap<>();
+    private HashMap<String, HashMap<String, Listener>> handlers = new HashMap<>();
 
     @Override
-    public boolean register(String namespace) {
+    public boolean registerNamespace(String namespace) {
         if (handlers.containsKey(namespace)) return false;
-        handlers.put(namespace, new HashMap<String, List<Listener>>());
+        handlers.put(namespace, new HashMap<String, Listener>());
         return true;
     }
 
     @Override
-    public void addAllListener(String namespace, Listener listener) {
-        HashMap<String, List<Listener>> hash = handlers.get(namespace);
+    public boolean listen(String namespace, Class<? extends Message> c, Listener listener) {
+        HashMap<String, Listener> hash = handlers.get(namespace);
         if (hash != null) {
-            for (Map.Entry<String, List<Listener>> entry:hash.entrySet()) {
-                entry.getValue().add(listener);
-            }
+            Listener old = hash.get(c.getName());
+            if (old != null) return false;
+            hash.put(c.getName(), listener);
+            return true;
         }
-    }
-
-    @Override
-    public void addListener(String namespace, Listener listener, String... names) {
-        if (names != null && names.length > 0) {
-            HashMap<String, List<Listener>> hash = handlers.get(namespace);
-            if (hash != null) {
-                for (String name:names) {
-                    List<Listener> list = hash.get(name);
-                    if (list != null) list.add(listener);
-                }
-            }
-        }
+        return false;
     }
 
     @Override
     public void trigger(MessageContext message) {
-        HashMap<String, List<Listener>> hash = handlers.get(message.getNamespace());
+        HashMap<String, Listener> hash = handlers.get(message.getNamespace());
         if (hash != null) {
-            List<Listener> list = hash.get(message.getName());
-            if (list != null) {
-                for (Listener listener: list) listener.onEvent(message);
-            }
+            Listener listener = hash.get(message.getName());
+            if (listener != null) listener.onEvent(message);
         }
     }
 }

@@ -5,25 +5,20 @@ public interface MessageManager {
      * 注册命名空间
      * @return 是否注册成功,如果已经有此命名空间,则返回false
      */
-    boolean register(String namespace);
+    boolean registerNamespace(String namespace);
 
     /**
-     * 添加监听命名空间内的全部消息
+     * 监听
+     * 一个类对应一个监听
      * @param namespace 命名空间
+     * @param c 消息类
      * @param listener 监听器
+     * @return 是否注册成功,如果已经有此类的监听或命名空间不存在,则注册失败
      */
-    void addAllListener(String namespace, Listener listener);
+    boolean listen(String namespace, Class<? extends Message> c, Listener listener);
 
     /**
-     * 添加监听命名空间内的指定消息
-     * @param namespace 命名空间
-     * @param listener 监听器
-     * @param names 指定消息列表,为空则不监听
-     */
-    void addListener(String namespace, Listener listener, String... names);
-
-    /**
-     * 触发事件,调用监听
+     * 触发
      * @param message 消息内容
      */
     void trigger(MessageContext message);
