@@ -1,8 +1,16 @@
 package com.fyxridd.netty.common.message.ver;
 
 /**
- * 代表信息
+ * 信息
  */
 public abstract class VerMessage {
-    private Ver ver;
+    protected Ver ver;
+
+    public VerMessage(Ver ver) {
+        this.ver = ver;
+    }
+
+    public Ver getVer() {
+        return ver;
+    }
 }

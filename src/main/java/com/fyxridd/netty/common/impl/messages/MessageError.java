@@ -1,7 +1,7 @@
 package com.fyxridd.netty.common.impl.messages;
 
 import com.fyxridd.netty.common.MessageMain;
-import com.fyxridd.netty.common.message.v1.Ver1MessageHandler;
+import com.fyxridd.netty.common.message.ver.v1.Ver1MessageHandler;
 import com.fyxridd.netty.common.message.Message;
 import org.json.JSONException;
 import org.json.JSONObject;

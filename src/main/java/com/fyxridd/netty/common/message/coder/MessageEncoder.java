@@ -1,25 +1,29 @@
 package com.fyxridd.netty.common.message.coder;
 
 import com.fyxridd.netty.common.message.MessageContent;
+import com.fyxridd.netty.common.message.ver.VerMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
-/**
- * 格式:
- * 长度+MessageContent(ver+内容)
- */
-public class MessageEncoder extends MessageToByteEncoder<MessageContent>{
+public class MessageEncoder extends MessageToByteEncoder<VerMessage>{
     @Override
-    protected void encode(ChannelHandlerContext ctx, MessageContent content, ByteBuf buf) throws Exception {
-        //生成内容
-        ByteBuf tmp = ctx.alloc().buffer();
-        tmp.writeInt(content.getVer().getNum());
-        content.getVer().getVerCoder().encode(tmp, content);
+    protected void encode(ChannelHandlerContext ctx, VerMessage content, ByteBuf buf) throws Exception {
+        ByteBuf b = null, tmp = null;
+        try {
+            //生成内容
+            b = content.getVer().getVerCoder().encode(content);
+            tmp = ctx.alloc().buffer();
+            tmp.writeInt(content.getVer().getNum());
+            tmp.writeBytes(b);
 
-        //写入Head
-        buf.writeInt(tmp.readableBytes());
-        //写入Body
-        buf.writeBytes(tmp);
+            //长度
+            buf.writeInt(tmp.readableBytes());
+            //内容
+            buf.writeBytes(tmp);
+        } finally {
+            if (b != null) b.release();
+            if (tmp != null) tmp.release();
+        }
     }
 }

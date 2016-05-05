@@ -1,21 +1,21 @@
 package com.fyxridd.netty.common;
 
-import com.fyxridd.netty.common.message.v1.Ver1Message;
-import com.fyxridd.netty.common.message.v1.Ver1MessageHandler;
-import com.fyxridd.netty.common.message.Message;
-import org.json.JSONObject;
+import com.fyxridd.netty.common.message.ver.VerMessage;
+import com.fyxridd.netty.common.message.ver.v1.Ver1MessageHandler;
 
-/**
- * 消息管理
- * --> 消息读入 --> MessageManager.fromJson  .. MessageExtra ..  --> MessageManager.toJson --> 消息写出
- */
 public interface MessageManager {
-    <T extends Message> void registerVer1Json(Class<T> messageClass, Ver1MessageHandler<T> ver1MessageHandler);
-
-    JSONObject toJson(Ver1Message msg);
+    /**
+     * 注册命名空间
+     * @return 是否注册成功,如果已经有此命名空间,则返回false
+     */
+    boolean register(String namespace);
 
     /**
-     * @return 可为null
+     * 注册消息定义
+     * @param namespace 命名空间
+     * @param name 消息名
+     * @param ver1MessageHandler
+     * @param <T>
      */
-    Message fromJson(JSONObject json);
+    <T extends VerMessage> void registerVer1Json(String namespace, String name, Ver1MessageHandler<T> ver1MessageHandler);
 }

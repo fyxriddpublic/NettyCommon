@@ -1,6 +1,6 @@
 package com.fyxridd.netty.common.message.ver;
 
-import com.fyxridd.netty.common.message.v1.Ver1Coder;
+import com.fyxridd.netty.common.message.ver.v1.Ver1Coder;
 
 import java.util.HashMap;
 
@@ -19,7 +19,9 @@ public enum Ver {
         vers.put(1, Ver.Json);
     }
 
+    //协议号
     private int num;
+    //编码/解码器
     private VerCoder verCoder;
 
     Ver(int num, VerCoder verCoder) {

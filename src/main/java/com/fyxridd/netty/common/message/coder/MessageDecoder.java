@@ -8,17 +8,14 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
 
-/**
- * @see MessageEncoder
- */
 public abstract class MessageDecoder extends ByteToMessageDecoder{
     private int read;
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws Exception {
-        //Head
+        //长度
         if (read == 0) {
-            if (buf.readableBytes() < 2) return;
+            if (buf.readableBytes() < 2) return;//这里假设int长度为2字节
             else {
                 read = buf.readInt();
                 //异常
@@ -30,11 +27,18 @@ public abstract class MessageDecoder extends ByteToMessageDecoder{
             }
         }
 
-        //Body
+        //内容
         if (buf.readableBytes() >= read) {
             Ver ver = Ver.getVerByNum(buf.readInt());
-            if (ver != null) {
-                VerMessage message = ver.getVerCoder().decode(buf, read);
+            if (ver != null) {//协议存在
+                ByteBuf tmp = ctx.alloc().buffer();
+                VerMessage message;
+                try {
+                    tmp.writeBytes(buf, read);
+                    message = ver.getVerCoder().decode(tmp);
+                } finally {
+                    tmp.release();
+                }
                 out.add(message);
                 handleVerMessage(message);
             }
