@@ -1,6 +1,7 @@
 package com.fyxridd.netty.common.debug;
 
 import com.fyxridd.netty.common.util.Util;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandler;
 
@@ -41,7 +42,7 @@ public class MessageDebugDecoder implements ChannelInboundHandler{
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        Util.log(">channelRead");
+        Util.log(">channelRead: "+((ByteBuf)msg).readableBytes());
         ctx.fireChannelRead(msg);
     }
 
@@ -66,6 +67,7 @@ public class MessageDebugDecoder implements ChannelInboundHandler{
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         Util.log(">exceptionCaught");
+        cause.printStackTrace();
         ctx.fireExceptionCaught(cause);
     }
 }

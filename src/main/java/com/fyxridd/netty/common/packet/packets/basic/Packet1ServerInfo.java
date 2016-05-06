@@ -23,6 +23,7 @@ public class Packet1ServerInfo implements Packet{
             public Packet1ServerInfo fromByteBuf(ByteBuf buf) {
                 int length = buf.readInt();
                 byte[] bytes = new byte[length];
+                buf.readBytes(bytes, 0, length);
                 String jsonStr = new String(bytes, CharsetUtil.UTF_8);
                 JSONObject json = new JSONObject(jsonStr);
                 String name = json.has("name")?json.getString("name"):null;
@@ -40,6 +41,7 @@ public class Packet1ServerInfo implements Packet{
 
                 ByteBuf buf = Unpooled.buffer();
                 byte[] bytes = json.toString().getBytes(CharsetUtil.UTF_8);
+                buf.writeInt(bytes.length);
                 buf.writeBytes(bytes);
                 return buf;
             }
@@ -78,5 +80,10 @@ public class Packet1ServerInfo implements Packet{
 
     public void setVer(String ver) {
         this.ver = ver;
+    }
+
+    @Override
+    public String toString() {
+        return "name:"+name+",url:"+url+",ver:"+ver;
     }
 }
