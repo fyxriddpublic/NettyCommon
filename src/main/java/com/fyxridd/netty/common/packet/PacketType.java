@@ -1,26 +1,19 @@
 package com.fyxridd.netty.common.packet;
 
-import com.fyxridd.netty.common.packet.packets.basic.Packet1ServerInfo;
-
 import java.util.HashMap;
 import java.util.Map;
 
-public enum PacketType {
-    ServerInfo(1, Packet1ServerInfo.class)
-    ;
-
+public class PacketType {
     private static Map<Integer, PacketType> ids = new HashMap<>();
-    static {
-        ids.put(PacketType.ServerInfo.getPacketId(), PacketType.ServerInfo);
-    }
 
     private int packetId;
     private Class packetClass;
     private Map<Integer, PacketHandler> packetHandlers = new HashMap<>();
 
-    PacketType(int packetId, Class packetClass) {
+    public PacketType(int packetId, Class packetClass) {
         this.packetId = packetId;
         this.packetClass = packetClass;
+        ids.put(packetId, this);
     }
 
     public int getPacketId() {
